@@ -1,0 +1,35 @@
+CMD	= tomoDD09
+CC	= gcc
+FC	= gfortran
+SRCS	= $(CMD).f \
+	  aprod.f cluster_tomoDD.f covar.f datum.f \
+	  delaz.f delaz2.f direct1.f dist.f exist.f \
+	  freeunit.f getinp_tomoDD.f ifindi.f \
+	  indexxi.f juliam.f \
+	  lsqr.f matmult1.f matmult2.f matmult3.f mdian1.f \
+	  normlz.f  ran.f redist.f refract.f \
+	  resstat_tomoDD.f scopy.f sdc2.f setorg.f \
+	  snrm2.f sort.f sorti.f sscal.f \
+	  svd.f tiddid.f trialsrc_tomoDD.f trimlen.f \
+	  ttime.f vmodel.f Ray3VD.f \
+          getdata_tomoDD.f add_sta.f find_id.f \
+          dtres_tomoDD.f weighting_tomoDD_lw.f lsfitH_tomoDD_lsqrn.f
+CSRCS	= atoangle_.c atoangle.c datetime_.c hypot_.c rpad_.c \
+          sscanf3_.c 
+OBJS	= $(SRCS:%.f=%.o) $(CSRCS:%.c=%.o)
+INCLDIR	= ./include
+
+CFLAGS	= -O -I$(INCLDIR) -m64 -mcmodel=medium
+FFLAGS  = -O -I$(INCLDIR) -implicit -ffixed-line-length-none -ffloat-store -W  -fbounds-check -m64 -mcmodel=medium
+
+LDFLAGS        = -O -m64 
+
+all: $(CMD)
+
+$(CMD): $(OBJS)
+	$(FC) $(LDFLAGS) $(OBJS) $(LIBS) -o $@
+
+%.o: %.f
+	$(FC) $(FFLAGS) -c $(@F:.o=.f) -o $@
+clean:
+	-rm -f $(CMD) *.o core a.out *.fln junk

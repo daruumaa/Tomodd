@@ -1,0 +1,70 @@
+A brief manual for tomoDD
+
+(1) before compile tomoDD, make sure the following parameters are set up
+    correctly. 
+    In ray_common.inc:
+    mxpari and maxpar (>=iuses*(nx-2)*(ny-2)*(nz-2))
+    maxnx, maxny, and maxnz should be equal or larger than the corresponding
+    values in the file MOD ( starting velocity model)
+
+    In include/tomoDD.inc
+    MAXEVE, MAXS and MAXDATA should be large enough.
+
+    Note: all the above parameters affect the memory space greatly. So my 
+    recommendation is to set up these parameters equal to a little bit larger 
+    than the actually values.
+
+(2) Set up tomoDD.inp
+    Most of the parameters in this file are the same as those in hypoDD.inp.
+    The following list those different parameters:
+ 
+   Output velocity file (unit 16): specify a name that you want. This file 
+      will save the DWS values for P- and S-wave, and Velocity values at 
+      different iterations.
+
+   Absolute data file: Different from hypoDD, tomoDD also reads into the 
+      absolute travel time data. Again you can specify a name that you want.
+      This file has the following format:
+    # eventID1
+    station travel_time weight phase
+    .......
+    # eventID2
+    ........
+
+   MOD: this file contains information of the starting velocity model and the
+        inversion grid set-up. YOU MUST SPECIFY EXACTLY THE SAME NAME. The 
+        format of this file is as follows:
+        nx, ny, nz, bld
+        xd(1),xd(2), ...., xd(nx)
+        yd(1),yd(2), ...., yd(ny)
+        zd(1),zd(2), ...., zd(nz)
+        Vp values (NZ*NY*NX)
+        Vp/Vs values (NZ*NY*NX)
+
+   CC_format: 1------- CC data has hypoDD format
+              2------- CC data has the format as follows:
+              
+	       eveID1 eveID2 sta dt weight phase
+  Note here assumes that waveform data have the same origin times as 
+  catalog data.
+
+  weight1, weighr2, weight3:
+    -------- first order smoothing constraint to slowness changes.
+
+ iuses: 1---- Only invert P-wave velocity
+        2---- Both P and S wave veloity
+
+       
+  lat_Orig, lon_Orig, Z_Orig: the coordinate center
+  iorig: 0------- use the cluster center as the coordinate center
+         1--------use the specified coordinate center  
+  rota: rotation of the coordinate system: anticlockwise (-), clockwise (+)
+
+  For tomoDD, only lsqr is used due to the huge amount of data (isolv=2).
+
+  For other parameters related to 3D ray tracing, you do not need to specify them unless 
+  you are quite familiar with simul2000.
+
+  WTCD 
+
+
